@@ -106,21 +106,32 @@ def reducer_query_4(sequence):
     """Reducer"""
     return sequence
 
+#
+# SELECT sexo, count(*)
+# FROM tips
+# GROUP BY sexo
+#
 def mapper_query_5(sequence):
     """Mapper"""
     result = []
     for index, (_, row) in enumerate(sequence):
         if index == 0:
-            result.append((index, row.strip()))
-        else:
-            row_values = row.strip().split(",")
-            if int(row_values[6]) >= 5 or float(row_values[0]) > 45:
-                result.append((index, row.strip()))
+            continue
+        row_values = row.strip().split(",")
+        result.append((row_values[2], 1))
     return result
+
 
 def reducer_query_5(sequence):
     """Reducer"""
-    return sequence
+    counter = dict()
+    for key, value in sequence:
+        if key not in counter:
+            counter[key] = 0
+        counter[key] += value
+    return list(counter.items())
+
+
 
 #
 # ORQUESTADOR:
